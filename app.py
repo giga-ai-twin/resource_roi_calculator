@@ -25,18 +25,18 @@ st.sidebar.title("導覽 (Navigation)")
 # Using radio button for "Tab" like switching
 page = st.sidebar.radio(
     "選擇頁面 (Select Page)",
-    ["Overall", "開發", "維護", "導入與落地"],
+    ["📊 Overall", "💻 開發", "🛠️ 維護", "🚀 導入與落地"],
     index=0
 )
 
 st.sidebar.markdown("---")
 
 # Routing Logic
-if page == "Overall":
+if page == "📊 Overall":
     overall.show()
-elif page == "開發":
+elif page == "💻 開發":
     development.show()
-elif page == "維護":
+elif page == "🛠️ 維護":
     maintenance.show()
-elif page == "導入與落地":
+elif page == "🚀 導入與落地":
     landing.show()
