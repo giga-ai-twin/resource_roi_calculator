@@ -7,69 +7,7 @@ def show():
     # Only keep the content part here, set_page_config stays in app.py
     
     # Custom CSS for Material 3 Expressive Look
-    st.markdown("""
-    <style>
-        /* Global Font - Roboto */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-        
-        html, body, [class*="css"] {
-            font-family: 'Roboto', sans-serif;
-        }
-    
-        /* M3 Cards (Containers) */
-        div[data-testid="stMetric"] {
-            background-color: #F3EDF7; /* Surface Container Low */
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12);
-            transition: transform 0.2s;
-        }
-        div[data-testid="stMetric"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-        }
-    
-        /* Primary Button (Filled) */
-        div.stButton > button {
-            background-color: #6750A4;
-            color: white;
-            border-radius: 20px;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-        div.stButton > button:hover {
-            background-color: #7D5260; /* Tertiary or slightly darker primary */
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-            color: white;
-        }
-    
-        /* Headers */
-        h1, h2, h3 {
-            color: #1C1B1F; /* On Surface */
-            font-weight: 500;
-        }
-    
-        /* Sidebar */
-        section[data-testid="stSidebar"] {
-            background-color: #F7F2FA; /* Surface Container */
-        }
-        
-        /* Inputs (Standard Rounded) */
-        div[data-baseweb="input"] > div {
-            border-radius: 8px;
-            background-color: #E6E1E5; /* Surface Variant */
-        }
-        
-        /* Sliders */
-        div[role="slider"] {
-            color: #6750A4;
-        }
-    
-    </style>
-    """, unsafe_allow_html=True)
+    # Custom CSS moved to app.py for global application
     
     # 標題
     st.title("📊 企業級 Agentic RAG 系統開發規格與成本效益評估計算機")
