@@ -1,41 +1,49 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+from translations import TRANSLATIONS
 
 def show():
-    st.title("💻 開發階段評估 (Development Phase)")
+    t = TRANSLATIONS[st.session_state.lang]
+    st.title(t["dev_title"])
     st.markdown("---")
     
-    st.info("此頁面專注於 **技術開發細節** 與 **工程資源分配**。")
+    st.info(t["dev_info"])
 
-    c1, c2 = st.columns(2)
+    st.subheader(t["tech_stack_header"])
+    col1, col2, col3 = st.columns(3)
     
+    with col1:
+        st.multiselect(t["core_framework"], ["LangChain", "LlamaIndex", "Haystack"], ["LangChain"])
+    with col2:
+        st.multiselect(t["vector_db"], ["Pinecone", "Milvus", "Chroma", "Weaviate"], ["Pinecone"])
+    with col3:
+        st.multiselect(t["monitoring_eval"], ["LangSmith", "Weights & Biases", "Arize Phoenix"], ["LangSmith"])
+
+    st.markdown("---")
+    st.subheader(t["hr_config_header"])
+    
+    c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.subheader("🛠️ 技術棧選型")
-        st.multiselect("核心框架", ["LangChain", "LlamaIndex", "Haystack", "Custom (Native Python)"], default=["LangChain"])
-        st.multiselect("向量資料庫", ["Pinecone", "Milvus", "Weaviate", "Qdrant", "Chroma"], default=["Qdrant"])
-        st.multiselect("監控與評估", ["LangSmith", "Arize Phoenix", "DeepEval", "Ragas"], default=["LangSmith"])
-
+        st.slider(t["be_ai_eng"], 1, 10, 3)
     with c2:
-        st.subheader("👥 人力資源配置")
-        st.slider("Backend / AI Engineers", 1, 10, 3)
-        st.slider("Frontend / UI Engineers", 0, 5, 1)
-        st.slider("Domain Experts (SME)", 0, 5, 1)
-        st.slider("QA / Testing", 0, 3, 1)
+        st.slider(t["fe_ui_eng"], 1, 10, 1)
+    with c3:
+        st.slider(t["domain_experts"], 1, 5, 1)
+    with c4:
+        st.slider(t["qa_testing"], 1, 5, 1)
 
     st.markdown("---")
-    st.subheader("📅 開發里程碑預估")
+    st.subheader(t["milestone_header"])
     
-    # Simple Gantt Chart Data
+    # Mock Dataframe for Milestones
     df = pd.DataFrame([
-        dict(Task="需求分析 & POC", Start='2024-01-01', Finish='2024-02-01', Resource='PM & Lead'),
-        dict(Task="系統架構設計", Start='2024-02-01', Finish='2024-03-01', Resource='Architect'),
-        dict(Task="核心 RAG 開發", Start='2024-03-01', Finish='2024-05-01', Resource='AI Team'),
-        dict(Task="前端與整合", Start='2024-04-15', Finish='2024-06-01', Resource='Full Stack'),
-        dict(Task="測試與優化", Start='2024-06-01', Finish='2024-07-01', Resource='QA & Team')
+        {t["task_col"]: t["task_analysis"], t["start_col"]: "2024-03-01", t["finish_col"]: "2024-03-15", t["resource_col"]: "PM/AI Eng"},
+        {t["task_col"]: t["task_arch"], t["start_col"]: "2024-03-16", t["finish_col"]: "2024-03-31", t["resource_col"]: "AI Lead"},
+        {t["task_col"]: t["task_rag"], t["start_col"]: "2024-04-01", t["finish_col"]: "2024-05-15", t["resource_col"]: "AI Eng"},
+        {t["task_col"]: t["task_fe"], t["start_col"]: "2024-05-16", t["finish_col"]: "2024-06-15", t["resource_col"]: "FE Eng"},
+        {t["task_col"]: t["task_qa"], t["start_col"]: "2024-06-16", t["finish_col"]: "2024-06-30", t["resource_col"]: "QA"},
     ])
     
-    # We can visualize this table or use a simple timeline
-    st.dataframe(df, use_container_width=True)
-    
-    st.caption("以上甘特圖數據僅為範例，實際需依據 Jira/Asana 排程為準。")
+    st.table(df)
+    st.caption(t["dev_caption"])
