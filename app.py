@@ -1,5 +1,16 @@
 import streamlit as st
 from views import overall, development, maintenance, landing
+from translations import TRANSLATIONS
+
+# Initialize language session state
+if 'lang' not in st.session_state:
+    st.session_state.lang = 'zh-tw'
+
+def swap_lang():
+    if st.session_state.lang == 'zh-tw':
+        st.session_state.lang = 'en'
+    else:
+        st.session_state.lang = 'zh-tw'
 
 # 設定頁面配置 (Must be the first Streamlit command)
 st.set_page_config(
@@ -8,105 +19,106 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS to improve Sidebar look
-# Global CSS with High Contrast Improvements
-st.markdown("""
+# Get current translations
+t = TRANSLATIONS[st.session_state.lang]
+
+# Global CSS with High Contrast Improvements and Top-Right positioning
+st.markdown(f"""
 <style>
     /* Global Font - Roboto */
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     
-    html, body, [class*="css"] {
+    html, body, [class*="css"] {{
         font-family: 'Roboto', sans-serif;
-    }
+    }}
 
-    /* M3 Cards (Containers) - Darkened for better contrast against white background */
-    div[data-testid="stMetric"] {
-        background-color: #E8DEF8; /* Surface Container - Slightly darker than previous F3EDF7 */
-        border: 1px solid #D0BCFF; /* Add border for definition */
+    /* Position the button at the top-right */
+    .stButton > button[kind="secondary"] {{
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background-color: #6200EE;
+        color: white;
+        border-radius: 20px;
+        padding: 0.4rem 1rem;
+        font-weight: 500;
+    }}
+
+    /* M3 Cards (Containers) */
+    div[data-testid="stMetric"] {{
+        background-color: #E8DEF8;
+        border: 1px solid #D0BCFF;
         border-radius: 16px;
         padding: 16px;
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
         transition: transform 0.2s;
-    }
-    div[data-testid="stMetric"]:hover {
+    }}
+    div[data-testid="stMetric"]:hover {{
         transform: translateY(-2px);
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    }
+    }}
 
-    /* Primary Button (Filled) - Higher Contrast */
-    div.stButton > button {
-        background-color: #6200EE; /* Deep Purple / Primary Key Color */
+    /* Primary Button */
+    div.stButton > button {{
+        background-color: #6200EE;
         color: white;
         border-radius: 20px;
         border: none;
         padding: 0.6rem 1.6rem;
-        font-weight: 600; /* Bolder text */
+        font-weight: 600;
         letter-spacing: 0.5px;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4); /* stronger shadow */
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
         transition: background-color 0.2s, box-shadow 0.2s;
-    }
-    div.stButton > button:hover {
-        background-color: #3700B3; /* Darker Purple on Hover */
+    }}
+    div.stButton > button:hover {{
+        background-color: #3700B3;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         color: white;
-        border: 1px solid #FFFFFF; /* High contrast border on hover */
-    }
-    div.stButton > button:active {
-        background-color: #000000; /* Black on active for max feedback */
-        color: white;
-    }
+        border: 1px solid #FFFFFF;
+    }}
 
     /* Headers */
-    h1, h2, h3 {
-        color: #000000; /* High Contrast Black instead of #1C1B1F */
+    h1, h2, h3 {{
+        color: #000000;
         font-weight: 600;
-    }
+    }}
 
-    /* Sidebar - Increase contrast of background */
-    section[data-testid="stSidebar"] {
-        background-color: #F3E5F5; /* Slightly richer purple/pink tint to differentiate from main white */
+    /* Sidebar */
+    section[data-testid="stSidebar"] {{
+        background-color: #F3E5F5;
         border-right: 1px solid #E1E1E1;
-    }
+    }}
     
-    /* Sidebar Navigation Items */
-    section[data-testid="stSidebar"] .stRadio > label {
+    section[data-testid="stSidebar"] .stRadio > label {{
         font-weight: bold;
-        color: #000000; /* Black text for nav items */
+        color: #000000;
         font-size: 1.05rem;
-    }
-
-    /* Inputs (Standard Rounded) - Darker background for visibility */
-    div[data-baseweb="input"] > div {
-        border-radius: 8px;
-        background-color: #F0F0F0; /* Darker Surface Variant */
-        border: 1px solid #B0B0B0; /* Add border */
-    }
-    
-    /* Sliders */
-    div[role="slider"] {
-        color: #6200EE;
-    }
+    }}
 
 </style>
 """, unsafe_allow_html=True)
 
+# Language Switcher at the top right
+# We use a button with secondary kind to target it in CSS
+st.button(t["lang_toggle"], on_click=swap_lang, type="secondary")
+
 # Sidebar Navigation
-st.sidebar.title("導覽 (Navigation)")
-# Using radio button for "Tab" like switching
+st.sidebar.title(t["nav_title"])
 page = st.sidebar.radio(
-    "選擇頁面 (Select Page)",
-    ["📊 Overall", "💻 開發", "🛠️ 維護", "🚀 導入與落地"],
+    t["select_page"],
+    [t["tab_overall"], t["tab_dev"], t["tab_maint"], t["tab_landing"]],
     index=0
 )
 
 st.sidebar.markdown("---")
 
 # Routing Logic
-if page == "📊 Overall":
+if page == t["tab_overall"]:
     overall.show()
-elif page == "💻 開發":
+elif page == t["tab_dev"]:
     development.show()
-elif page == "🛠️ 維護":
+elif page == t["tab_maint"]:
     maintenance.show()
-elif page == "🚀 導入與落地":
+elif page == t["tab_landing"]:
     landing.show()
